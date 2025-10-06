@@ -20,11 +20,13 @@ env:
 
 jobs:
   build:
-    runs-on: ${{ matrix.runner }}
+    runs-on: ubuntu-latest
+    container: ${{ vars.REGISTRY }}/${{ vars.REGISTRY_USER }}/builder:${{ matrix.builder }}
     strategy:
       matrix:
-        runner:
-          - ubuntu-latest
+        builder:
+          - amd64-ubuntu-22.04
+          - arm64-ubuntu-22.04
 
     steps:
       - name: Checkout
@@ -50,10 +52,10 @@ jobs:
       - name: Release
         uses: actions/gitea-release-action@v1
         with:
+          token: ${{ secrets.COMMIT_TOKEN }}
           tag_name: ${{ steps.build.outputs.tag }}
-          name: ${{ steps.build.outputs.target }}
-          body: ${{ steps.build.outputs.target }}
+          name: musl-gcc ${{ steps.build.outputs.tag }}
+          body: musl-gcc ${{ steps.build.outputs.tag }}
           append_body: false
           make_latest: true
-          files: |-
-            *.tar.xz
+          files: ${{ steps.build.outputs.target }}.tar.xz
