@@ -2,6 +2,14 @@
 
 TAG=${TAG:-v0.9.11}
 
+REPO=${REPO:-https://git.mtdcy.top:8443/mtdcy/musl-gcc-build.git}
+
+test -f build.sh || {
+    git clone $REPO musl-gcc
+    cd musl-gcc
+    exec ./build.sh
+}
+
 build=musl-cross-make
 target=$(uname -m)-unknown-linux-musl
 
