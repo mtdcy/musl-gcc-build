@@ -20,11 +20,13 @@ env:
 
 jobs:
   build:
-    runs-on: ${{ matrix.runner }}
+    runs-on: ubuntu-latest
+    container: ${{ var.REGISTRY }}/${{ var.REGISTRY_USER }}/builder:${{ matrix.builder }}
     strategy:
       matrix:
-        runner:
-          - ubuntu-latest
+        builder:
+          - amd64-ubuntu-22.04
+          - arm64-ubuntu-22.04
 
     steps:
       - name: Checkout
@@ -55,5 +57,4 @@ jobs:
           body: ${{ steps.build.outputs.target }}
           append_body: false
           make_latest: true
-          files: |-
-            *.tar.xz
+          files: ${{ steps.build.outputs.target }}.tar.xz
