@@ -1,0 +1,42 @@
+---
+name: Update musl-gcc
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'  # weekly
+
+  workflow_dispatch: null
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.COMMIT_TOKEN }}
+
+      - name: try update musl-gcc
+        shell: bash -ex
+        run: |-
+          IFS=' :' read -r _ version < <(grep 'tag: ' .github/workflows/build.yml | head -n1)
+
+          IFS='.' read -r m n r <<< "${version#v}"
+
+          if curl -fsSLI https://github.com/richfelker/musl-cross-make/archive/refs/tags/v$m.$n.$((r+1)).tar.gz -o /dev/null; then
+            r=$((r + 1))
+          elif curl -fsSLI https://github.com/richfelker/musl-cross-make/archive/refs/tags/v$m.$((n+1)).0.tar.gz -o /dev/null; then
+            n=$((n + 1))
+            r=0
+          else
+            return 0
+          fi
+
+          sed -i "s/tag: .*$/tag: v$m.$n.$r/" .github/workflows/build.yml
+
+          sed -i "s/TAG:-.*$/TAG:-v$m.$n.$r}/" build.sh
+
+          git add .
+          git ci -m "update => $m.$n.$r"
+          git push
