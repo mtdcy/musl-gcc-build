@@ -30,9 +30,11 @@ touch sources/*
 
 cp config.mak.dist config.mak
 
-TARGET=$target make
+{ 
+    TARGET=$target make
 
-TARGET=$target make install
+    TARGET=$target make install
+} | tee "../$target.log"
 
 popd
 

@@ -19,9 +19,15 @@ on:
         description: Which tag to build
 
 jobs:
-  amd64:
-    runs-on: ubuntu-latest
+  build-musl-gcc:
+    runs-on: ${{ matrix.runner }}
     container: ${{ vars.REGISTRY }}/${{ vars.REGISTRY_USER }}/builder:ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        runner:
+          - ubuntu-latest
+          - ubuntu-latest-arm
 
     steps:
       - name: Checkout
@@ -40,7 +46,6 @@ jobs:
           [ -n "$tag" ] || tag=${{ env.tag }}
 
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
-          echo "target=$(uname -m)-unknown-linux-musl" >> "$GITHUB_OUTPUT"
 
           TAG=$tag ./build.sh
 
@@ -53,40 +58,6 @@ jobs:
           body: musl-gcc ${{ steps.build.outputs.tag }}
           append_body: false
           make_latest: true
-          files: ${{ steps.build.outputs.target }}.tar.xz
-
-  arm64:
-    runs-on: macos-arm64
-    container: ${{ vars.REGISTRY }}/${{ vars.REGISTRY_USER }}/builder:ubuntu-22.04
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          submodules: recursive
-
-      - name: Build
-        id: build
-        shell: bash
-        run: |
-          set -ex
-
-          tag="${{ github.event.inputs.tag }}"
-          [ -n "$tag" ] || tag=${{ env.tag }}
-
-          echo "tag=$tag" >> "$GITHUB_OUTPUT"
-          echo "target=$(uname -m)-unknown-linux-musl" >> "$GITHUB_OUTPUT"
-
-          TAG=$tag ./build.sh
-
-      - name: Release
-        uses: actions/gitea-release-action@v1
-        with:
-          token: ${{ secrets.COMMIT_TOKEN }}
-          tag_name: ${{ steps.build.outputs.tag }}
-          name: musl-gcc ${{ steps.build.outputs.tag }}
-          body: musl-gcc ${{ steps.build.outputs.tag }}
-          append_body: false
-          make_latest: true
-          files: ${{ steps.build.outputs.target }}.tar.xz
+          files: |-
+            *.tar.xz
+            *.log
