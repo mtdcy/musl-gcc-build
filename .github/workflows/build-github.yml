@@ -1,0 +1,66 @@
+---
+name: Build musl-gcc
+
+env:
+  tag: v0.9.11
+
+on:
+  push:
+    paths:
+      - .github/workflows/build-github.yml
+      - build.sh
+    branches:
+      - main
+
+  workflow_dispatch:
+    inputs:
+      tag:
+        type: string
+        description: Which tag to build
+
+jobs:
+  build-musl-gcc:
+    runs-on: ${{ matrix.runner }}
+    container: ghcr.io/mtdcy/builder:ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        runner:
+          - ubuntu-22.04
+          - ubuntu-22.04-arm
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+          set-safe-directory: true
+
+      - name: Build
+        id: build
+        shell: bash
+        run: |
+          set -ex
+
+          git config --global --add safe.directory '*'
+
+          tag="${{ github.event.inputs.tag }}"
+          [ -n "$tag" ] || tag=${{ env.tag }}
+
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
+          TAG=$tag ./build.sh
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          token: ${{ secrets.RELEASE_TOKEN }}
+          tag_name: ${{ steps.build.outputs.tag }}
+          name: musl-gcc ${{ steps.build.outputs.tag }}
+          body: musl-gcc ${{ steps.build.outputs.tag }}
+          append_body: false
+          make_latest: true
+          files: |-
+            *.tar.xz
+            *.log
