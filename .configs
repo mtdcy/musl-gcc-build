@@ -1,0 +1,4 @@
+COMMON_CONFIG   : CFLAGS=-g0 -Os -fPIC --static  CXXFLAGS=-g0 -Os -fPIC --static  LDFLAGS=-s -static --disable-nls
+GCC_CONFIG      : --disable-lto --disable-multilib
+MUSL_CONFIG     : CFLAGS=-g0 -Os -fPIC
+BINUTILS_CONFIG : 
