@@ -55,7 +55,7 @@ jobs:
           token: ${{ secrets.COMMIT_TOKEN }}
           tag_name: ${{ steps.build.outputs.tag }}
           name: musl-gcc ${{ steps.build.outputs.tag }}
-          body: musl-gcc ${{ steps.build.outputs.tag }}
+          body_path: .configs
           append_body: false
           make_latest: true
           files: |-

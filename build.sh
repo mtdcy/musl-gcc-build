@@ -38,4 +38,6 @@ ln -sfv ../config.mak .
 
 popd
 
+make dump_config
+
 tar -C $build/output -cvf $target.tar.xz .
