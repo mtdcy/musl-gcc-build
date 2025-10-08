@@ -9,6 +9,7 @@ on:
     paths:
       - .github/workflows/build.yml
       - build.sh
+      - config.mak
     branches:
       - main
 

@@ -86,7 +86,8 @@ GCC_CONFIG += --disable-multilib
 # following and add other languages if you want to try getting them to
 # work too.
 
-# GCC_CONFIG += --enable-languages=c,c++
+# build ffmpeg needs objc
+GCC_CONFIG += --enable-languages=c,c++,objc
 
 # You can keep the local build path out of your toolchain binaries and
 # target libraries with the following, but then gdb needs to be told
