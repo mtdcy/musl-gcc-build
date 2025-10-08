@@ -28,7 +28,7 @@ ln -sf ../sources .
 
 touch sources/*
 
-cp config.mak.dist config.mak
+ln -sfv ../config.mak .
 
 { 
     TARGET=$target make
