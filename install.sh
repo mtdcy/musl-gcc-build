@@ -36,7 +36,7 @@ append_path() {
     grep -q "PATH=.*/opt/bin" "$1" || {
         info "echo PATH=$INSTALL_PATH/bin:\$PATH >> $1"
 
-        echo -e "\nmusl-gcc:"                    >> "$1"
+        echo -e "\n#musl-gcc:"                   >> "$1"
         echo    "PATH=$INSTALL_PATH/bin:\$PATH"  >> "$1"
     }
 }
