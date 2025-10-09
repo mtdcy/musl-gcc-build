@@ -40,4 +40,4 @@ popd
 
 make config.md
 
-tar -C $build/output -cvf $target.tar.xz .
+tar -C $build/output -cvJf $target.tar.xz .
