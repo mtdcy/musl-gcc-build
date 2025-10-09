@@ -4,13 +4,9 @@
 
 ```shell
 # Github
-curl -fsSL https://github.com/mtdcy/musl-gcc-build/releases/latest/download/$(uname -m)-unknown-linux-musl.tar.xz | tar -C /opt -xJv
+bash -c "$(curl -fsSL https://github.com/mtdcy/musl-gcc-build/raw/refs/heads/main/build.sh)"
 # CN
-curl -fsSL https://git.mtdcy.top:8443/mtdcy/musl-gcc-build/releases/download/latest/$(uname -m)-unknown-linux-musl.tar.xz | tar -C /opt -xJv
-
-export PATH=/opt/bin:$PATH
-
-$(uname -m)-unknown-linux-musl-gcc --version
+bash -c "$(curl -fsSL https://git.mtdcy.top:8443/mtdcy/musl-gcc-build/raw/branch/main/install.sh)"
 ```
 
 ## How to build
