@@ -40,4 +40,7 @@ popd
 
 make config.md
 
-tar -C $build/output -cvJf $target.tar.xz .
+# remove libtool *.la files
+find $build/output -name "*.la" -exec rm -f {} \; || true
+
+tar -C $build/output -cvf $target.tar.xz .
