@@ -36,6 +36,7 @@ jobs:
         with:
           fetch-depth: 0
           submodules: recursive
+          token: ${{ secrets.COMMIT_TOKEN }}
 
       - name: Build
         id: build
@@ -47,6 +48,11 @@ jobs:
           [ -n "$tag" ] || tag=${{ env.tag }}
 
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
+          git config user.name "bot"
+          git config user.email "bot@noreply.mtdcy.top"
+          git tag -a "$tag" -m "$tag" --force
+          git push origin "$tag" --force
 
           TAG=$tag ./build.sh
 
