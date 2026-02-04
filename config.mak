@@ -32,14 +32,14 @@
 # Setting a blank version for linux will suppress installation of kernel
 # headers, which are not needed unless compiling programs that use them.
 
-# BINUTILS_VER = 2.33.1
-# GCC_VER = 5.2.0
-# MUSL_VER = git-master
-# GMP_VER =
-# MPC_VER =
-# MPFR_VER =
-# ISL_VER =
-# LINUX_VER =
+#LINUX_VER = 5.8.5
+BINUTILS_VER = 2.33.1
+GCC_VER = 13.3.0
+MUSL_VER = 1.2.5
+#GMP_VER = 6.1.2
+#MPC_VER = 1.1.0
+#MPFR_VER = 4.0.2
+#ISL_VER = 0.21
 
 # By default source archives are downloaded with wget. curl is also an option.
 
@@ -64,8 +64,8 @@
 # Recommended options for smaller build for deploying binaries:
 
 # these configs affect only gcc and binutils
-COMMON_CONFIG += CFLAGS="-g0 -Os -fPIC --static" 
-COMMON_CONFIG += CXXFLAGS="-g0 -Os -fPIC --static" 
+COMMON_CONFIG += CFLAGS="-g0 -Os -fPIC --static"
+COMMON_CONFIG += CXXFLAGS="-g0 -Os -fPIC --static"
 COMMON_CONFIG += LDFLAGS="-s -static"
 COMMON_CONFIG += --disable-nls
 

@@ -18,10 +18,10 @@ git submodule update --init --recursive --force
 
 pushd "$build"
 
-git checkout $TAG --force 
+git checkout $TAG --force
 
 sed -i Makefile \
-    -e 's/ftpmirror.gnu.org/mirrors.ustc.edu.cn/g' 
+    -e 's/ftpmirror.gnu.org/mirrors.ustc.edu.cn/g'
 
 # cached packages
 ln -sf ../sources .
@@ -30,10 +30,10 @@ touch sources/*
 
 ln -sfv ../config.mak .
 
-{ 
-    TARGET=$target make
+{
+    TARGET=$target make -j$(nproc) &&
 
-    TARGET=$target make install
+    TARGET=$target make install || exit 1
 } | tee "../$target.log"
 
 popd
