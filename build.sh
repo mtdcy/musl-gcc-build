@@ -1,6 +1,6 @@
 #!/bin/bash -ex
 
-TAG=${TAG:-v0.9.11}
+BUILDER=${BUILDER:-v0.9.11}
 
 REPO=${REPO:-https://git.mtdcy.top:8443/mtdcy/musl-gcc-build.git}
 
@@ -18,7 +18,7 @@ git submodule update --init --recursive --force
 
 pushd "$build"
 
-git checkout $TAG --force
+git checkout $BUILDER --force
 
 sed -i Makefile \
     -e 's/ftpmirror.gnu.org/mirrors.ustc.edu.cn/g'

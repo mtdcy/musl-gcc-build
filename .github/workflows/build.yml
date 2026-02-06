@@ -1,9 +1,6 @@
 ---
 name: Build musl-gcc
 
-env:
-  tag: v0.9.11
-
 on:
   push:
     paths:
@@ -13,11 +10,7 @@ on:
     branches:
       - main
 
-  workflow_dispatch:
-    inputs:
-      tag:
-        type: string
-        description: Which tag to build
+  workflow_dispatch: null
 
 jobs:
   build-musl-gcc:
@@ -44,24 +37,17 @@ jobs:
         run: |
           set -ex
 
-          tag="${{ github.event.inputs.tag }}"
-          [ -n "$tag" ] || tag=${{ env.tag }}
-
-          echo "tag=$tag" >> "$GITHUB_OUTPUT"
-
           git config user.name "bot"
           git config user.email "bot@noreply.mtdcy.top"
-          git tag -a "$tag" -m "$tag" --force
-          git push origin "$tag" --force
 
-          TAG=$tag ./build.sh
+          ./build.sh && make tag && echo "tag=$(cat .tag)" >> "$GITHUB_OUTPUT"
 
       - name: Release
         uses: actions/gitea-release-action@v1
         with:
           token: ${{ secrets.COMMIT_TOKEN }}
           tag_name: ${{ steps.build.outputs.tag }}
-          name: musl-gcc ${{ steps.build.outputs.tag }}
+          name: ${{ steps.build.outputs.tag }}
           body_path: config.md
           append_body: false
           make_latest: true
