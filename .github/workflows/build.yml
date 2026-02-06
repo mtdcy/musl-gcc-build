@@ -39,8 +39,11 @@ jobs:
 
           git config user.name "bot"
           git config user.email "bot@noreply.mtdcy.top"
+          git config --global --add safe.directory '*'
 
-          ./build.sh && make tag && echo "tag=$(cat .tag)" >> "$GITHUB_OUTPUT"
+          make
+
+          echo "tag=$(git describe --abbrev=0 --tags)" >> "$GITHUB_OUTPUT"
 
       - name: Release
         uses: actions/gitea-release-action@v1
@@ -53,4 +56,4 @@ jobs:
           make_latest: true
           files: |-
             *.tar.xz
-            *.log
+            *.log.gz

@@ -36,10 +36,10 @@
 BINUTILS_VER = 2.33.1
 GCC_VER = 13.3.0
 MUSL_VER = 1.2.5
-#GMP_VER = 6.1.2
-#MPC_VER = 1.1.0
-#MPFR_VER = 4.0.2
-#ISL_VER = 0.21
+GMP_VER = 6.1.2
+MPC_VER = 1.1.0
+MPFR_VER = 4.0.2
+ISL_VER = 0.21
 
 # By default source archives are downloaded with wget. curl is also an option.
 
@@ -60,6 +60,10 @@ MUSL_VER = 1.2.5
 # binaries produced by the existing toolchain (in this example, i486).
 
 # COMMON_CONFIG += CC="i486-linux-musl-gcc -static --static" CXX="i486-linux-musl-g++ -static --static"
+ifneq ($(shell which $(TARGET)-gcc),)
+	COMMON_CONFIG += CC="$(TARGET)-gcc -static --static"
+	COMMON_CONFIG += CXX="$(TARGET)-g++ -static --static"
+endif
 
 # Recommended options for smaller build for deploying binaries:
 

@@ -4,34 +4,36 @@ INSTALL_PATH="${INSTALL_PATH:-/opt}"
 
 info()  { echo -e "🚀 \\033[32m$*\\033[39m"; }
 
+TARGET="$(uname -m)-linux-musl"
+
 if curl -fsSI --connect-timeout 1 https://git.mtdcy.top -o /dev/null; then
-    url=https://git.mtdcy.top:8443/mtdcy/musl-gcc-build/releases/download/latest/$(uname -m)-unknown-linux-musl.tar.xz
+    url=https://git.mtdcy.top:8443/mtdcy/musl-gcc-build/releases/download/latest/$TARGET.tar.xz
 else
-    url=https://github.com/mtdcy/musl-gcc-build/releases/latest/download/$(uname -m)-unknown-linux-musl.tar.xz
+    url=https://github.com/mtdcy/musl-gcc-build/releases/latest/download/$TARGET.tar.xz
 fi
 
 # shellcheck disable=SC2064
 TEMPDIR="$(mktemp -d)" && trap "rm -rf $TEMPDIR" EXIT
 
-TARGET="$TEMPDIR/$(basename "$url")"
+dest="$TEMPDIR/$(basename "$url")"
 
 info "curl < $url"
-curl -fsSL "$url" -o "$TARGET"
+curl -fsSL "$url" -o "$dest"
 
-info "unzip $(basename "$TARGET") > $INSTALL_PATH"
+info "unzip $(basename "$dest") > $INSTALL_PATH"
 if [ -w "$INSTALL_PATH" ]; then
-    tar -C "$INSTALL_PATH" -xf "$TARGET"
+    tar -C "$INSTALL_PATH" -xf "$dest"
 else
-    sudo tar -C "$INSTALL_PATH" -xf "$TARGET"
+    sudo tar -C "$INSTALL_PATH" -xf "$dest"
 fi
 
-CC="$INSTALL_PATH/bin/$(uname -m)-unknown-linux-musl-gcc"
+CC="$INSTALL_PATH/bin/$TARGET-gcc"
 
 info "check $CC"
 "$CC" --version
 
 info "fix ld-musl"
-sudo ln -sfv $(find "$INSTALL_PATH/$(uname -m)-unknown-linux-musl" -name libc.so) /lib/ld-musl-$(uname -m).so.1
+sudo ln -sfv $(find "$INSTALL_PATH/$TARGET" -name libc.so) /lib/ld-musl-$(uname -m).so.1
 
 info "Setup PATH"
 

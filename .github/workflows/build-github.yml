@@ -44,24 +44,23 @@ jobs:
         run: |
           set -ex
 
+          git config user.name "bot"
+          git config user.email "bot@noreply.mtdcy.top"
           git config --global --add safe.directory '*'
 
-          tag="${{ github.event.inputs.tag }}"
-          [ -n "$tag" ] || tag=${{ env.tag }}
+          make
 
-          echo "tag=$tag" >> "$GITHUB_OUTPUT"
-
-          TAG=$tag ./build.sh
+          echo "tag=$(git describe --abbrev=0 --tags)" >> "$GITHUB_OUTPUT"
 
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
           token: ${{ secrets.RELEASE_TOKEN }}
           tag_name: ${{ steps.build.outputs.tag }}
-          name: musl-gcc ${{ steps.build.outputs.tag }}
+          name: ${{ steps.build.outputs.tag }}
           body_path: config.md
           append_body: false
           make_latest: true
           files: |-
             *.tar.xz
-            *.log
+            *.log.gz
