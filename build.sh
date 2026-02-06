@@ -11,7 +11,7 @@ test -f build.sh || {
 }
 
 build=musl-cross-make
-target=$(uname -m)-unknown-linux-musl
+target=$(uname -m)-linux-musl
 
 # submodules
 git submodule update --init --recursive --force
