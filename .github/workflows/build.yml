@@ -41,7 +41,7 @@ jobs:
           git config user.email "bot@noreply.mtdcy.top"
           git config --global --add safe.directory '*'
 
-          make
+          make tag && make
 
           echo "tag=$(git describe --abbrev=0 --tags)" >> "$GITHUB_OUTPUT"
 

@@ -10,7 +10,7 @@ LOG = $(TARGET).log
 
 include config.mak
 
-all: config.md tag
+all: config.md
 	# prepare builder
 	git submodule set-branch -b $(BUILDER) $(SUBDIR)
 	git submodule update --init --recursive --force

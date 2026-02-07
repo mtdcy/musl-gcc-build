@@ -8,8 +8,8 @@ on:
   push:
     paths:
       - .github/workflows/build-github.yml
-      - build.sh
-      - config.mak
+    tags:
+      - 'gcc-**-musl-**'
     branches:
       - main
 
@@ -44,8 +44,6 @@ jobs:
         run: |
           set -ex
 
-          git config user.name "bot"
-          git config user.email "bot@noreply.mtdcy.top"
           git config --global --add safe.directory '*'
 
           make
