@@ -1,23 +1,16 @@
 ---
 name: Build musl-gcc
 
-env:
-  tag: v0.9.11
-
 on:
   push:
-    paths:
-      - .github/workflows/build-github.yml
+    # paths:
+    #  - .github/workflows/build-github.yml
+    # branches:
+    #  - main
     tags:
       - 'gcc-**-musl-**'
-    branches:
-      - main
 
-  workflow_dispatch:
-    inputs:
-      tag:
-        type: string
-        description: Which tag to build
+  workflow_dispatch: null
 
 jobs:
   build-musl-gcc:
