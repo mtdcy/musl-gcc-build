@@ -24,7 +24,7 @@ cd musl-gcc-build
 # custom build settings
 nvim config.mak
 
-./build.sh
+make
 ```
 
 ## License
