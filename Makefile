@@ -8,6 +8,9 @@ BUILDER = v0.9.11
 TAG = gcc-$(GCC_VER)-musl-$(MUSL_VER)
 LOG = $(TARGET).log
 
+SHELL = /bin/bash
+.SHELLFLAGS = -eo pipefail -c
+
 include config.mak
 
 all: config.md
