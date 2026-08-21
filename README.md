@@ -6,7 +6,7 @@
 # Github
 bash -c "$(curl -fsSL https://github.com/mtdcy/musl-gcc-build/raw/refs/heads/main/install.sh)"
 # CN
-bash -c "$(curl -fsSL https://git.mtdcy.top:8443/mtdcy/musl-gcc-build/raw/branch/main/install.sh)"
+bash -c "$(curl -fsSL https://gitea.mtdcy.top:8443/mtdcy/musl-gcc-build/raw/branch/main/install.sh)"
 ```
 
 You can change install path by set env `INSTALL_PATH`.
@@ -17,7 +17,7 @@ You can change install path by set env `INSTALL_PATH`.
 # Github
 git clone https://github.com/mtdcy/musl-gcc-build.git
 # CN
-git clone https://git.mtdcy.top:8443/mtdcy/musl-gcc-build.git
+git clone https://gitea.mtdcy.top:8443/mtdcy/musl-gcc-build.git
 
 cd musl-gcc-build
 
