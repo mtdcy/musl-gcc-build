@@ -68,8 +68,10 @@ endif
 # Recommended options for smaller build for deploying binaries:
 
 # these configs affect only gcc and binutils
-COMMON_CONFIG += CFLAGS="-g0 -Os -fPIC --static"
-COMMON_CONFIG += CXXFLAGS="-g0 -Os -fPIC --static"
+# 1. 增加 -pipe 以减少临时文件生成（虽然会多占一点内存，但对 I/O 友好）
+# 2. 移除 -fPIC：如果是编译纯静态工具链，-fPIC 通常是不需要的，除非要做插件
+COMMON_CONFIG += CFLAGS="-g0 -Os -pipe --static"
+COMMON_CONFIG += CXXFLAGS="-g0 -Os -pipe --static"
 COMMON_CONFIG += LDFLAGS="-s -static"
 COMMON_CONFIG += --disable-nls
 
@@ -83,7 +85,16 @@ MUSL_CONFIG += CFLAGS="-g0 -Os -fPIC"
 # GCC_CONFIG += --disable-libitm
 # GCC_CONFIG += --disable-fixed-point
 GCC_CONFIG += --disable-lto
+GCC_CONFIG += --disable-nls
+GCC_CONFIG += --disable-plugin
 GCC_CONFIG += --disable-multilib
+
+# 在 CI/Docker 镜像中，通常不需要三阶段校验，极大缩短构建时间
+GCC_CONFIG += --disable-bootstrap
+# 禁用预编译头，减少内存占用和 fork 时的文件 IO
+GCC_CONFIG += --disable-libstdcxx-pch
+# 禁用一些非核心组件，减少 GCC 内部的“链式反应”
+GCC_CONFIG += --disable-libquadmath --disable-decimal-float --disable-fixed-point
 
 # By default C and C++ are the only languages enabled, and these are
 # the only ones tested and known to be supported. You can uncomment the
